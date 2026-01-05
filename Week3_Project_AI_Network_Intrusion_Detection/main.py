@@ -14,13 +14,13 @@ import matplotlib.pyplot as plt
 st.set_page_config(page_title="AI NIDS", layout="wide")
 
 st.title("AI Network Intrusion Detection System")
-st.write("Detects **DDoS, Port-Scan, Brute-Force & Generic Attacks**")
+st.write("Detects **DDoS or BENIGN**")
 
 
 # LOAD DATA
 @st.cache_data
 def load_dataset():
-    df = pd.read_csv("network_logs.csv")
+    df = pd.read_csv("Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv")
 
     # clean column names
     df.columns = df.columns.str.strip()
@@ -168,19 +168,12 @@ if st.button("Analyze Packet"):
         #  ATTACK LABELING LOGIC 
         attack_label = "BENIGN"
 
-        # ML generic flag
-        if ml_attack:
-            attack_label = "GENERIC ATTACK"
-
-        # specific overrides
-        if p_bwd == 0 and p_fwd > 40:
-            attack_label = "PORT SCAN"
-
-        elif packet_rate > 8:
+       
+        if packet_rate > 8:
             attack_label = "DDOS"
 
-        elif fwd_back_ratio > 20 and total_packets > 400:
-            attack_label = "BRUTE FORCE"
+        else :
+            attack_label = "BENIGN"
 
         # OUTPUT 
         if attack_label == "BENIGN":
